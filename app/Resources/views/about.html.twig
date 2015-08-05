@@ -1,0 +1,166 @@
+{% extends '::base.html.twig' %}
+{% block title %}
+  O mnie
+{% endblock %}
+{% block backtext %}
+Powrót
+{% endblock %}
+{% block body -%}
+<style>
+.ui-content {
+    text-align: center;
+}
+.tablerow {
+    display: inline-block;
+    width: 100%;
+}
+.left-table {
+    text-align: right;
+    width: 25%; float: left;
+    padding-right: 2%;
+    font-weight: bold;
+}
+.right-table {
+    text-align: left;
+    width: 73%; float: left;
+}
+
+.ui-collapsible-heading-toggle {
+    border: none;
+}
+
+.ui-textalign-left {
+    text-align: left;
+}
+</style>
+    <div id="logo-wrap">
+      <img src="{{ asset('avatar.JPG') }}" alt="ja" />
+    </div>
+   <div data-role="collapsible-set">
+
+       <div data-role="collapsible" data-corners="false" class="ui-corner-none" data-collapsed="false">
+           <h2 class="ui-collapsible-heading"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+               <span class="ui-btn-text">Podstawowe informacje</span>
+           </a></h2>
+           <div class="ui-body ui-body-d ui-textalign-left">
+
+
+               <div class="tablerow">
+                   <div class="left-table">Kto:</div>
+                   <div class="right-table">Andrzej Piszczek</div>
+               </div>
+               <div class="tablerow">
+                   <div class="left-table">Wiek:</div>
+                   <div class="right-table">23</div>
+               </div>
+               <div class="tablerow">
+                   <div class="left-table">E-mail:</div>
+                   <div class="right-table">andpis58@gmail.com</div>
+               </div>
+               <div class="tablerow">
+                   <div class="left-table">Miejscowość:</div>
+                   <div class="right-table">Kraków</div>
+               </div>
+               <div class="tablerow">
+                   <div class="left-table">Praca:</div>
+                   <div class="right-table">Student/Programista PHP</div>
+               </div>
+               <div class="tablerow">
+                   <div class="left-table">O mnie:</div>
+                   <div class="right-table">Zajmuje się programowaniem stron internetowych oraz aplikacji mobilnych.</div>
+               </div>
+
+           </div>
+       </div>
+
+       <!-- my skills -->
+       <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+           <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+               <span class="ui-btn-text">Umiejętności i wiedza</span>
+           </a></h2>
+           <div class="ui-body ui-body-d ui-textalign-left">
+
+               <div data-role="collapsible-set">
+
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                         <a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">JavaScript</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                           Znam podstawy programowania w JavaScript
+                        </div>
+                   </div>
+
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">jQuery</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          Jest to podstawowy framework z jakiego korzystam podczas pracy z JavaScriptem
+                        </div>
+                   </div>
+
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">PHP</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          Programowanie obiektowe z wykorzystaniem wzorców projektowych. Relacyjne bazy danych.
+                       </div>
+                   </div>
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">Symfony</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          Framework z jakiego korzystam gdy piszę większosc aplikacji internetowych
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+           <h2 class="ui-collapsible-heading"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+               <span class="ui-btn-text">Zainteresowania & Hobby</span>
+           </a></h2>
+           <div class="ui-body ui-body-d ui-textalign-left ui-corner-none" data-corners="false">
+
+               <div data-role="collapsible-set" class="ui-corner-none" data-corners="false">
+
+                   <!-- interests & hobbies -->
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">Snowboard</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          W zimie nie odpuszcze sobie jazdy na desce :)
+                        </div>
+                   </div>
+
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">Pływanie</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          Często wolne chwile spędzam na basenie
+                       </div>
+                   </div>
+
+                   <div data-role="collapsible" data-corners="false" class="ui-corner-none">
+                       <h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed"><a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-up-d" href="#" data-corners="false" data-shadow="false" data-iconshadow="true" data-icon="plus" data-iconpos="left" data-theme="d">
+                           <span class="ui-btn-text">Czołgi</span>
+                       </a></h2>
+                       <div class="ui-body ui-textalign-left">
+                          Jestem fanem broni pancernej z okresu II wojny światowej
+                       </div>
+                   </div>
+
+
+               </div>
+
+           </div>
+       </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+{% block title %}
+Quiz Generator
+{% endblock %}
+{% block body %}
+  <div id="logo-wrap">
+    <img src="{{ asset('logo.jpeg')}}" alt="Uek">
+  </div>
+  <ul data-role="listview" data-inset="true" data-filter="false">
+    <li><a href="{{ path('quiz_new')}}">Dodaj Quiz</a></li>
+    <li><a href="#">Szukaj Quizu</a></li>
+    <li><a href="{{ path('about') }}">O mnie</a></li>
+  </ul>
+{% endblock %}

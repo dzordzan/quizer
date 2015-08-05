@@ -1,0 +1,8 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+about:
+    path: /about
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    about.html.twig

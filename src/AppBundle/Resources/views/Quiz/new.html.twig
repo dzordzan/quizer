@@ -1,0 +1,139 @@
+{% extends '::base.html.twig' %}
+{% set randomID = random() %}
+{% macro widget_prototype(widget, remove_text) %}
+    {% if widget.vars.prototype %}
+        {% set form = widget.vars.prototype %}
+        {% set name = widget.vars.prototype.vars.name %}
+    {% else %}
+        {% set form = widget %}
+        {% set name = widget.vars.full_name %}
+    {% endif %}
+    <div style="color:red; display:none; width: 100%; text-align: center" class="questionError">
+      Formularz jest niepoprawnie wypełniony!
+    </div>
+    {{ form_widget(form.title)}}
+    {% for answer in form.answers %}
+    <div style="width:100%; display: table">
+      <div style="width:82%; display: table-cell">
+        {{ form_widget(answer.title) }}
+      </div>
+      <div style="width:18%; display: table-cell">
+        {{ form_row(answer.correct) }}
+      </div>
+    </div>
+    {% endfor %}
+    <div data-content="{{ name }}">
+      <div style="display:table; width:100%">
+        <a href="#" class="ui-btn ui-icon-delete ui-btn-icon-left" data-rel="back" style="display:table-cell; width:50%">Anuluj</a>
+        <a
+          href="#" class="btn-add ui-btn ui-icon-plus ui-btn-icon-left"
+          style="display:table-cell; width:50%"
+          data-length="{{widget|length}}">Dodaj</a>
+      </div>
+
+      {#  {{ form_widget(form) }} #}
+    </div>
+{% endmacro %}
+
+{% block title %}
+  Dodaj własny quiz
+{% endblock %}
+{% block backtext %}
+Powrót
+{% endblock %}
+{% block body -%}
+    {{ form_start(form) }}
+
+    <div data-role="fieldcontain" class="ui-hide-label">
+  	   <label for="username">Nazwa quizu:</label>
+  	    {{ form_widget(form.title ) }}
+        {{ form_errors(form.title) }}
+    </div>
+    <div id="quiz_questions">
+      {% for question in form.questions %}
+      <div style="width:100%; display: table">
+        Pytanie {{ loop.index }}
+      </div>
+      <div style="display:none" id="invisible">
+           {{ form_widget(question) }}
+      </div>
+      {% endfor %}
+      <div style="display:none" id="rest">
+      </div>
+    </div>
+
+      <a href="#quiz_modal{{randomID}}"
+        data-rel="popup"
+        data-position-to="window"
+        data-role="button"
+        data-inline="true"
+        class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a"
+        data-transition="pop">Dodaj pytanie</a>
+    <br/>
+    <a href="./" data-role="button" data-inline="true">Anuluj</a>
+    <button type="submit" data-role="button" data-inline="true" data-theme="b" id="add_quiz_button">Dodaj quiz</button>
+    {% do form.questions.setRendered %}
+
+
+    {{ form_end(form) }}
+    <div data-role="popup" id="quiz_modal{{randomID}}" data-theme="a" class="ui-corner-all">
+            <div style="padding:10px 20px;" class="clone">
+              {{_self.widget_prototype(form.questions)}}
+            </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$(function(){
+  var length = 0;
+
+  $(document).on('click','.btn-add', function(event) {
+      var error = false;
+       $('#quiz_modal{{randomID}} div.clone').find('input').each(function(index, el) {
+         if ($(el).val() == '')
+         {
+           console.log(el);
+           error = true;
+         }
+
+
+       });
+       if (error == true)
+       {
+         $('div.questionError').show("slow").delay(3000).hide("slow");
+         return;
+       }
+       console.log("test");
+      quizPrototype = $('#quiz_modal{{randomID}} div.clone').clone(true);
+      if (length == 0)
+          length = $(this).data('length');
+      length = length + 1;
+
+      quizPrototype.find('input').each(function(index, el) {
+        var protoName = $(el).attr('name');
+        $(el).prop('id', '');
+        $(el).prop('name', protoName.replace(/__name__/g, length));
+      });
+      $('#rest').parent().append('<div style="width:100%; display: table">Pytanie '+ length +'</div>');
+      $('#rest').append(quizPrototype);
+      $('#quiz_modal{{randomID}}').popup('close');
+      //return false;
+  });
+  $('.btn-remove').live('click', function(event) {
+      var name = $(this).attr('data-related');
+      $('*[data-content="'+name+'"]').remove();
+      return false;
+  });
+   $('#quiz_modal{{randomID}}').popup({
+    beforeposition: function( event, ui ) {
+      $('#quiz_modal{{randomID}} input:not(:checkbox)').each(function(index, el) {
+        $(el).val('');
+
+      });
+    }
+  });
+});
+</script>
+{% endblock %}
