@@ -7,6 +7,9 @@
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <style>
+      table td, th {
+           vertical-align: top
+      }
       #logo-wrap {
         width: 100%;
         text-align: center;
@@ -15,8 +18,35 @@
           max-width: 100%;
           max-height: 150px;
       }
-
+      #questions_table{
+        table-layout: fixed;
+      }
+      #questions_table th:nth-child(1)
+      {
+        width: 8px;
+      }
+      #questions_table th:nth-child(2)
+      {
+        width: 75%;
+      }
+      #questions_table th:nth-child(3)
+      {
+        width: 20%;
+      }
+      .ui-table-columntoggle-btn
+      {
+        display: none;
+      }
+      .trunc
+      {
+        white-space: nowrap;
+        width: 100%;                   /* IE6 needs any width */
+        overflow: hidden;              /* "overflow" value must be different from  visible"*/
+        -o-text-overflow: ellipsis;    /* Opera < 11*/
+        text-overflow:    ellipsis;    /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
+      }
     </style>
+
 </head>
 <body>
     <div data-role="page" >
@@ -51,6 +81,10 @@
 
     </div><!-- /page -->
 
-
+    <script>
+      $(document).bind("mobileinit", function(){
+        $.mobile.foo = bar;
+      });
+    </script>
 </body>
 </html>

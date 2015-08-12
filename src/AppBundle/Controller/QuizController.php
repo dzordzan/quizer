@@ -8,7 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Quiz;
+use AppBundle\Entity\QuizApproach;
+use AppBundle\Entity\QuestionApproach;
 use AppBundle\Form\QuizType;
+use AppBundle\Form\QuizApproachType;
 
 /**
  * Quiz controller.
@@ -85,8 +88,49 @@ class QuizController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('quiz_show', array('id' => $entity->getId())));
-          
+            return $this->redirect($this->generateUrl('quiz_show', array('link' => $entity->getLink())));
+
+        }
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Displays a form to create a new Quiz entity.
+     *
+     * @Route("/approach/{id}", name="quiz_approach")
+     * @Template()
+     */
+    public function quizAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quiz = $em->getRepository('AppBundle:Quiz')->find($id);
+
+        if (!$quiz)
+          throw $this->createNotFoundException("Quiz nie istnieje");
+
+        $entity = new QuizApproach();
+        $entity->setQuiz($quiz);
+
+        foreach ($quiz->getQuestions() as $question) {
+          $questionApproach = new QuestionApproach();
+          $questionApproach->setQuestion($question);
+          $entity->addQuestionsApproach($questionApproach);
+        }
+        $form = $this->createForm(new QuizApproachType(), $entity, []);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+          if ($form->get('end')->isClicked()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('quiz_show', array('link' => $entity->getLink())));
+                      }
         }
         return array(
             'entity' => $entity,
@@ -97,25 +141,24 @@ class QuizController extends Controller
     /**
      * Finds and displays a Quiz entity.
      *
-     * @Route("/{id}", name="quiz_show", requirements={"id": "\d+"})
+     * @Route("/quiz/{link}", name="quiz_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction($link)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Quiz')->find($id);
+        $entity = $em->getRepository('AppBundle:Quiz')->findOneByLink($link);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Quiz entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        //$deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entity'      => $entity
         );
     }
 

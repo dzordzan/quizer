@@ -1,0 +1,106 @@
+{% extends '::base.html.twig' %}
+{% block title %}
+  {{ form.vars.value.quiz.title }}
+{% endblock %}
+{% block body -%}
+<style>
+.panel{
+
+}
+</style>
+<div>
+  {{ form_start(form, {'attr': {'data-ajax':'false'}}) }}
+  <div class="panel">
+    <h2>Twój nick: </h2>
+    {{ form_widget(form.author) }}
+  </div>
+
+  {% for questionApproach in form.questionsApproach %}
+
+  {% set s = 'display:none;' %}
+  {% if form.end.vars.clicked or form.check.vars.clicked  %}
+    {% set s = ' '%}
+  {% endif %}
+  <div class="panel" style="{{s}}">
+    <div class="ui-controlgroup-controls" data-role="controlgroup">
+    <h2>{{ questionApproach.vars.value.question.title }}</h2>
+      {% for child in questionApproach.answer %}
+        {% set index = child.vars.value %}{# get array index #}
+        {% set entity = questionApproach.answer.vars.choices[index].data %}
+        {% set style = '' %}
+
+        {% if (form.end.vars.clicked or form.check.vars.clicked) %}
+          {% if entity.correct == true %}
+            {% set style = 'color: lime;' %}
+          {% elseif questionApproach.answer.vars.value.id == child.vars.value %}
+            {% set style = 'color: red;' %}
+          {% endif %}
+        {% endif %}
+
+          {{ form_widget(child) }}
+            {{- form_label(child, {}, { 'label_attr': {'style': style}})}}
+      {% endfor %}
+    </div>
+      </div>
+    {% endfor %}
+    <div class="panel" style="{% if not form.check.vars.clicked %}display:none{% endif %}">
+      {% set styleEnd = 'display:none' %}
+      {% set styleCheck = '' %}
+      {% if form.check.vars.clicked %}
+        {% set styleEnd = '' %}
+        {% set styleCheck = 'display:none;' %}
+      {% else %}
+
+      {% endif %}
+
+      {{ form_row(form.check, {'attr':{'style':styleCheck}}) }}
+      {{ form_row(form.end, {'attr':{'style':styleEnd}}) }}
+    </div>
+    {% if not form.end.vars.clicked and not form.check.vars.clicked  %}
+      <div data-role="controlgroup" data-type="horizontal" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all">
+        <div class="ui-controlgroup-controls ">
+    			<a href="#" class="ui-btn ui-corner-all ui-icon-arrow-l ui-btn-icon-left back">Wstecz</a>
+    			<a href="#" class="ui-btn ui-corner-all ui-icon-arrow-r ui-btn-icon-right ui-last-child next">Dalej</a>
+    		</div>
+      </div>
+    {% endif %}
+
+
+{{ form_end(form) }}
+<script>
+$(function(){
+  function validForm(){
+    var $myForm = $('form')
+    if (!$myForm[0].checkValidity()) {
+      // If the form is invalid, submit it. The form won't actually submit;
+      // this will just cause the browser to display the native HTML5 error messages.
+      $myForm.find(':submit').click();
+      return false;
+    }
+    return true;
+  }
+$('a.next').click(function(event) {
+  if ($('div.panel:visible').next('.panel').length)
+    {
+      var panel = $('div.panel:visible:first');
+      if (!panel.find('input:checked, input[value!=""]:not([type=radio])').length){
+        validForm();
+      } else {
+          panel.hide("slow").next().show("slow");
+        }
+
+    }
+
+});
+$('a.back').click(function(event) {
+  if ($('div.panel:visible').prev('.panel').length)
+  {
+      $('div.panel:visible:first').hide("slow").prev().show("slow");
+  }
+});
+});
+</script>
+
+</div>
+
+{% endblock %}

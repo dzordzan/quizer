@@ -1,44 +1,37 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+<style>
+.quiz_properties td, th{
+  text-align: left;
+}
+</style>
     <h1>Quiz</h1>
 
-    <table class="record_properties">
+    <table class="quiz_properties">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>Numer</th>
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th>Tytuł</th>
                 <td>{{ entity.title }}</td>
             </tr>
             <tr>
-                <th>Createdat</th>
+                <th>Utworzony</th>
                 <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
-                <th>Link</th>
+                <th>Link do quizu</th>
                 <td>{{ entity.link }}</td>
             </tr>
             <tr>
-                <th>Adminlink</th>
-                <td>{{ entity.adminlink }}</td>
+                <th>Ilość pytań</th>
+                <td>{{ entity.questions|length }}</td>
             </tr>
         </tbody>
     </table>
-{{ entity.questions|length }}
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('quiz') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('quiz_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <a href="./" data-role="button" data-inline="true">Anuluj</a>
+    <a href="" data-role="button" data-inline="true" data-theme="b" >Rozwiąż Quiz</button>
 {% endblock %}

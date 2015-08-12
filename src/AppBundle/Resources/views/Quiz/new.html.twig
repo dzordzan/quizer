@@ -49,18 +49,27 @@ Powrót
   	    {{ form_widget(form.title ) }}
         {{ form_errors(form.title) }}
     </div>
-    <div id="quiz_questions">
-      {% for question in form.questions %}
+
+      {#}{% for question in form.questions %}
       <div style="width:100%; display: table">
         Pytanie {{ loop.index }}
       </div>
       <div style="display:none" id="invisible">
            {{ form_widget(question) }}
       </div>
-      {% endfor %}
-      <div style="display:none" id="rest">
-      </div>
-    </div>
+    {% endfor %}#}
+    <table data-role="table" id="questions_table" class="ui-body-d ui-shadow table-stripe ui-responsive" data-mode="columntoggle" >
+     <thead>
+       <tr class="ui-bar-d">
+         <th>Nr</th>
+         <th>Pytanie</th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr><td></td><td></td><td></td></tr>
+     </tbody>
+    </table>
 
       <a href="#quiz_modal{{randomID}}"
         data-rel="popup"
@@ -77,7 +86,7 @@ Powrót
 
     {{ form_end(form) }}
     <div data-role="popup" id="quiz_modal{{randomID}}" data-theme="a" class="ui-corner-all">
-            <div style="padding:10px 20px;" class="clone">
+            <div style="padding:10px 20px;" class="proto">
               {{_self.widget_prototype(form.questions)}}
             </div>
     </div>
@@ -86,29 +95,55 @@ Powrót
 
 {% block javascripts %}
 <script type="text/javascript">
+var question_prototype = "";
+
+function isValid(modal)
+{
+  var errorDIV = modal.find('div.questionError');
+  var error = false;
+  // jeśli któryś z inputów jest pusty
+  modal.find('input').each(function(index, el) {
+    ;
+    if ($(el).val() == '')
+    {
+      if (errorDIV.is(':hidden'))
+         errorDIV.show("slow").delay(3000).hide("slow");
+
+      error = true;
+    }
+
+  });
+  // jeśli nie jest zaznaczona żadna odpowiedź jako prawidłowa
+  if (modal.find('input:checked').length === 0)
+  {
+    if (errorDIV.is(':hidden'))
+        errorDIV.show("slow").delay(3000).hide("slow");
+
+     return false;
+  }
+
+  if (error)
+    return false;
+
+  return true;
+}
+
 $(function(){
   var length = 0;
 
   $(document).on('click','.btn-add', function(event) {
-      var error = false;
-       $('#quiz_modal{{randomID}} div.clone').find('input').each(function(index, el) {
-         if ($(el).val() == '')
-         {
-           console.log(el);
-           error = true;
-         }
+      var protoModal = $('#quiz_modal{{randomID}} div.proto');
 
+      if (isValid(protoModal) == false)
+        return false;
 
-       });
-       if (error == true)
-       {
-         $('div.questionError').show("slow").delay(3000).hide("slow");
-         return;
-       }
-       console.log("test");
-      quizPrototype = $('#quiz_modal{{randomID}} div.clone').clone(true);
+      console.log(isValid(protoModal));
+      // klonujemy prototyp
+      quizPrototype = protoModal.clone(true);
+      //ustaw id dla prototypu
       if (length == 0)
           length = $(this).data('length');
+
       length = length + 1;
 
       quizPrototype.find('input').each(function(index, el) {
@@ -116,23 +151,55 @@ $(function(){
         $(el).prop('id', '');
         $(el).prop('name', protoName.replace(/__name__/g, length));
       });
-      $('#rest').parent().append('<div style="width:100%; display: table">Pytanie '+ length +'</div>');
-      $('#rest').append(quizPrototype);
-      $('#quiz_modal{{randomID}}').popup('close');
-      //return false;
+
+      row = $('<tr id="r_'+length+'"></tr>');
+      id = $('<td></td>').append(length);
+      href="#quiz_modal{{randomID}}"
+
+
+
+      title = $('<td class="trunc"></td>').append(quizPrototype.find('input[name*=title]:eq(0)').val());
+      actions = $('<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all ui-mini" style="margin:0px">'+
+                  '<div class="">'+
+                  //'<a href="#p_'+length+'" data-position-to="window" class="ui-btn ui-corner-all ui-icon-gear ui-btn-icon-notext ui-first-child question-edit"'+
+                  //' data-rel="popup" data-role="button" style="display:table-cell;padding:3px" ></a>'+
+                  '<a href="#" data-row="r_'+length+'"class="ui-btn ui-corner-all ui-icon-delete ui-btn-icon-notext ui-last-child question-delete" style="display:table-cell;padding:3px"></a>'+
+                  '</div></div>');
+
+      action = $('<td></td>');
+      action.append(actions);
+
+      newPopup = $('<div style="display:none;"></div>')
+      newPopup.append(quizPrototype);
+      action.append(newPopup);
+      console.log(newPopup);
+      row.append(id);
+      row.append(title);
+      row.append(action);
+
+      $('#questions_table > tbody').append(row);
+
+      //$('#rest').append(quizPrototype);
+      protoModal.popup('close');
   });
+
   $('.btn-remove').live('click', function(event) {
       var name = $(this).attr('data-related');
       $('*[data-content="'+name+'"]').remove();
       return false;
   });
+
    $('#quiz_modal{{randomID}}').popup({
-    beforeposition: function( event, ui ) {
+    afterclose: function( event, ui ) {
       $('#quiz_modal{{randomID}} input:not(:checkbox)').each(function(index, el) {
         $(el).val('');
 
       });
     }
+  });
+
+  $(document).on('click', '.question-delete', function(){
+      $('#'+$(this).data('row')).remove();
   });
 });
 </script>
