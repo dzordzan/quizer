@@ -3,9 +3,9 @@
 <head>
     <title>{% block title %}Quiz Generator{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css">
-    <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <link rel="stylesheet" href="{{asset('assets/jquery.mobile-1.4.5.min.css')}}">
+    <script src="{{ asset('assets/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ asset('assets/jquery.mobile-1.4.5.min.js') }}"></script>
     <style>
       table td, th {
            vertical-align: top
@@ -54,7 +54,7 @@
         <div data-role="header" data-theme="b">
 
             <h1>{{ block('title')}}</h1>
-            <a href="{% block backlink %}./{% endblock %}" data-icon="home" data-role="button"
+            <a href="{% block backlink %}{{path('main')}}{% endblock %}" data-icon="home" data-role="button"
             class="ui-btn-left ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-left ui-btn-up-b"
             data-corners="true" data-shadow="true"
             data-iconshadow="true"
@@ -67,7 +67,7 @@
             </span></a>
         </div><!-- /header -->
 
-        <div data-role="content">
+        <div data-role="content" id="content">
             {% block body %}
 
           {% endblock %}

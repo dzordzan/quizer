@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Ostatnie podejścia{% endblock %}
+{% block body -%}
+
+    <table data-role="table" id="questions_table" class="ui-body-d ui-shadow table-stripe ui-responsive" data-mode="columntoggle" >
+     <thead>
+       <tr class="ui-bar-d">
+        <th></th>
+        <th style="width:40%">Quiz</th>
+         <th style="width:36%">Autor</th>
+         <th style="width:20%">Poprawnych</th>
+       </tr>
+     </thead>
+     <tbody>
+
+        {% for entity in entities %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td class="trunc"><a href="{{ path('quiz_show', {'link': entity.quiz.link}) }}">{{ entity.quiz.title }}</a></td>
+                <td class="trunc"><a href="{{ path('approach_show', {'id': entity.id}) }}">{{ entity.author }}</a></td>
+                {% set correct = 0 %}
+                {% for q in entity.questionsApproach if q.answer.correct==true %}
+                  {% set correct = correct + 1 %}
+                {% endfor %}
+                <td>{{correct}}/{{ entity.questionsApproach|length }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}

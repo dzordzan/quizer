@@ -24,7 +24,7 @@
             </tr>
             <tr>
                 <th>Link do quizu</th>
-                <td>{{ entity.link }}</td>
+                <td><a href="{{ path('quiz_show', {'link': entity.link}) }}">Link</a></td>
             </tr>
             <tr>
                 <th>Ilość pytań</th>
@@ -32,6 +32,6 @@
             </tr>
         </tbody>
     </table>
-    <a href="./" data-role="button" data-inline="true">Anuluj</a>
-    <a href="" data-role="button" data-inline="true" data-theme="b" >Rozwiąż Quiz</button>
+    <a href="{{path('main')}}" data-role="button" data-inline="true">Anuluj</a>
+    <a href="{{path('quiz_approach', {'id': entity.id})}}" data-role="button" data-inline="true" data-theme="b" >Rozwiąż Quiz</a>
 {% endblock %}

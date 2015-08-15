@@ -22,6 +22,7 @@ class AnswerType extends AbstractType
               ])
             ->add('correct', null, [
               'label' => "Prawda",
+              'data' => false,
               'required' => false
               ])
         ;

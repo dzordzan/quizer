@@ -8,7 +8,8 @@ Quiz Generator
   </div>
   <ul data-role="listview" data-inset="true" data-filter="false">
     <li><a href="{{ path('quiz_new')}}">Dodaj Quiz</a></li>
-    <li><a href="#">Szukaj Quizu</a></li>
+    <li><a href="{{ path('quiz') }}">Lista Quizów</a></li>
+    <li><a href="{{ path('quiz_approach_rank') }}">Ranking</a></li>
     <li><a href="{{ path('about') }}">O mnie</a></li>
   </ul>
 {% endblock %}

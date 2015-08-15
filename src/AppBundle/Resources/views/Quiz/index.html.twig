@@ -1,47 +1,29 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}Lista Quizów{% endblock %}
 {% block body -%}
-    <h1>Quiz list</h1>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Createdat</th>
-                <th>Link</th>
-                <th>Adminlink</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <table data-role="table" id="questions_table" class="ui-body-d ui-shadow table-stripe ui-responsive" data-mode="columntoggle" >
+     <thead>
+       <tr class="ui-bar-d">
+         <th>Nr</th>
+         <th style="width:45%">Tytuł</th>
+         <th style="width:30%">Dodany</th>
+         <th style="width:20%"></th>
+       </tr>
+     </thead>
+     <tbody>
+
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('quiz_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.title }}</td>
-                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.link }}</td>
-                <td>{{ entity.adminlink }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('quiz_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('quiz_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
+                <td>{{ loop.index }}</td>
+                <td class="trunc">{{ entity.title }}</td>
+                <td class="trunc">{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d') }}{% endif %}</td>
+                <td><a data-role="button" data-mini="true" href="{{ path('quiz_approach', {'id': entity.id}) }}">Rozwiąż</a></td>
+
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('quiz_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

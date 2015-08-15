@@ -12,21 +12,23 @@
       Formularz jest niepoprawnie wypełniony!
     </div>
     {{ form_widget(form.title)}}
-    {% for answer in form.answers %}
-    <div style="width:100%; display: table">
-      <div style="width:82%; display: table-cell">
-        {{ form_widget(answer.title) }}
+    <div  class="parent">
+      {% for answer in form.answers %}
+      <div style="width:100%; display: table">
+        <div style="width:82%; display: table-cell" >
+          {{ form_widget(answer.title) }}
+        </div>
+        <div style="width:18%; display: table-cell">
+          {{ form_row(answer.correct) }}
+        </div>
       </div>
-      <div style="width:18%; display: table-cell">
-        {{ form_row(answer.correct) }}
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
     <div data-content="{{ name }}">
       <div style="display:table; width:100%">
         <a href="#" class="ui-btn ui-icon-delete ui-btn-icon-left" data-rel="back" style="display:table-cell; width:50%">Anuluj</a>
         <a
-          href="#" class="btn-add ui-btn ui-icon-plus ui-btn-icon-left"
+          href="#" class="ui-btn ui-icon-plus ui-btn-icon-left add-question"
           style="display:table-cell; width:50%"
           data-length="{{widget|length}}">Dodaj</a>
       </div>
@@ -42,8 +44,10 @@
 Powrót
 {% endblock %}
 {% block body -%}
-    {{ form_start(form) }}
-
+    {{ form_start(form, {'attr': {'data-ajax':'false'}}) }}
+    <div style="color:red; display:none; width: 100%; text-align: center" id="quiz-error">
+      Dodaj przynajmniej jedno pytanie!
+    </div>
     <div data-role="fieldcontain" class="ui-hide-label">
   	   <label for="username">Nazwa quizu:</label>
   	    {{ form_widget(form.title ) }}
@@ -80,7 +84,7 @@ Powrót
         data-transition="pop">Dodaj pytanie</a>
     <br/>
     <a href="./" data-role="button" data-inline="true">Anuluj</a>
-    <button type="submit" data-role="button" data-inline="true" data-theme="b" id="add_quiz_button">Dodaj quiz</button>
+    <a data-role="button" data-inline="true" data-theme="b" id="add-quiz">Dodaj quiz</a>
     {% do form.questions.setRendered %}
 
 
@@ -107,7 +111,7 @@ function isValid(modal)
     if ($(el).val() == '')
     {
       if (errorDIV.is(':hidden'))
-         errorDIV.show("slow").delay(3000).hide("slow");
+         errorDIV.slideDown("slow").delay(3000).slideUp("slow");
 
       error = true;
     }
@@ -128,10 +132,11 @@ function isValid(modal)
   return true;
 }
 
-$(function(){
+$(document).on('pageinit pageshow', function(){
   var length = 0;
 
-  $(document).on('click','.btn-add', function(event) {
+  $('#quiz_modal{{randomID}} .add-question:eq(0)').unbind('click').bind('click', function(event) {
+      event.preventDefault();
       var protoModal = $('#quiz_modal{{randomID}} div.proto');
 
       if (isValid(protoModal) == false)
@@ -180,14 +185,17 @@ $(function(){
       $('#questions_table > tbody').append(row);
 
       //$('#rest').append(quizPrototype);
-      protoModal.popup('close');
+      $("#quiz_modal{{randomID}}").popup('close');
+
+
+      //protoModal.popup('close');
   });
 
-  $('.btn-remove').live('click', function(event) {
+  /*$(document).on('click','.btn-remove', function(event) {
       var name = $(this).attr('data-related');
       $('*[data-content="'+name+'"]').remove();
       return false;
-  });
+  });*/
 
    $('#quiz_modal{{randomID}}').popup({
     afterclose: function( event, ui ) {
@@ -201,6 +209,32 @@ $(function(){
   $(document).on('click', '.question-delete', function(){
       $('#'+$(this).data('row')).remove();
   });
+
+  $('#add-quiz').unbind('click').bind('click', function(){
+
+    if (length === 0)
+    {
+      if ($('#quiz-error').is(':hidden'))
+      {
+
+        $('#quiz-error').slideDown("slow").delay(3000).slideUp("slow");
+      }
+    }else{
+
+      $('form').submit();
+    }
+
+  });
+  $(document).on('change', 'input:checkbox', function(){
+
+
+    var id = $(this).attr('id');
+    var parent = $(this).closest('.parent');
+
+    parent.find('input:checkbox:not(input[id="'+id+'"])').prop('checked', false).checkboxradio("refresh");
+
+  });
+
 });
 </script>
 {% endblock %}

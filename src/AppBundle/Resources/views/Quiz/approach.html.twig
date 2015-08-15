@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<style>
+.quiz_properties td, th{
+  text-align: left;
+}
+</style>
+    <h1>Quiz</h1>
+
+    <table class="quiz_properties">
+        <tbody>
+            <tr>
+                <th>Autor</th>
+                <td>{{ entity.author }}</td>
+            </tr>
+            <tr>
+                <th>Tytuł Quziu</th>
+                <td>{{ entity.quiz.title }}</td>
+            </tr>
+            <tr>
+                <th>Data podejscia</th>
+                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Link do quizu</th>
+                <td><a href="{{ path('quiz_show', {'link': entity.quiz.link}) }}">Link</a></td>
+            </tr>
+            <tr>
+                <th>Ilość poprawnych/pytan</th>
+                {% set correct = 0 %}
+                {% for q in entity.questionsApproach if q.answer.correct==true %}
+                  {% set correct = correct + 1 %}
+                {% endfor %}
+                <td>{{correct}}/{{ entity.questionsApproach|length }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{path('main')}}" data-role="button" data-inline="true">Anuluj</a>
+    <a href="{{path('quiz_approach_rank') }}" data-role="button" data-inline="true" data-theme="b" >Lista najlepszych</a>
+{% endblock %}

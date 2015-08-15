@@ -15,7 +15,10 @@ class QuizApproachType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('author')
+            ->add('author', null, [
+              'required' => true,
+              'data' => 'Twój nick'
+              ])
             ->add('questionsApproach', 'collection', [
               'type' => new QuestionApproachType(),
               'allow_add' => false,

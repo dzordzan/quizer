@@ -32,6 +32,24 @@ class QuizController extends Controller
       return [];
   }
 
+  /**
+   * Lists all Quiz entities.
+   *
+   * @Route("/rank", name="quiz_approach_rank")
+   * @Method("GET")
+   * @Template()
+   */
+  public function rankAction()
+  {
+      $em = $this->getDoctrine()->getManager();
+
+      $entities = $em->getRepository('AppBundle:QuizApproach')->findAll();
+
+      return array(
+          'entities' => $entities,
+      );
+  }
+
     /**
      * Lists all Quiz entities.
      *
@@ -88,7 +106,7 @@ class QuizController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('quiz_show', array('link' => $entity->getLink())));
+            return $this->redirectToRoute('quiz_show', array('link' => $entity->getLink()));
 
         }
         return array(
@@ -100,7 +118,7 @@ class QuizController extends Controller
     /**
      * Displays a form to create a new Quiz entity.
      *
-     * @Route("/approach/{id}", name="quiz_approach")
+     * @Route("/approach/new/{id}", name="quiz_approach")
      * @Template()
      */
     public function quizAction(Request $request, $id)
@@ -129,12 +147,33 @@ class QuizController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('quiz_show', array('link' => $entity->getLink())));
-                      }
+            return $this->redirect($this->generateUrl('approach_show', array('id' => $entity->getId())));
+            }
         }
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     *
+     * @Route("/approach/{id}", name="approach_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function approachAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AppBundle:QuizApproach')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Brak encji.');
+        }
+
+        return array(
+            'entity'      => $entity
         );
     }
 
